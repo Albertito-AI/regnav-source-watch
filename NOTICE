@@ -1,0 +1,9 @@
+RegNav Source Watch
+Copyright 2026 Albert Tan Sin Hon
+
+This repository contains a separate implementation of a source-change review
+workflow. The Apache-2.0 licence applies to original code and documentation in
+this repository. It grants no licence to the separate policykit repository,
+third-party source texts, private research, names or trade marks.
+
+All materials in examples/basic are fictional training data.

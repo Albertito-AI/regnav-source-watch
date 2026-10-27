@@ -1,0 +1,33 @@
+name: 'RegNav Source Watch'
+description: 'Identify research, policy and governance claims affected by changed source files or evidence records.'
+author: 'Albert Tan Sin Hon'
+branding:
+  icon: 'book-open'
+  color: 'blue'
+inputs:
+  manifest:
+    description: 'Manifest path relative to the checked-out repository root.'
+    required: false
+    default: '.regnav/manifest.json'
+  base-sha:
+    description: 'Full base commit SHA. Defaults to the pull request base or push before SHA.'
+    required: false
+  head-sha:
+    description: 'Full head commit SHA. Defaults to the pull request head or push after SHA.'
+    required: false
+  mode:
+    description: 'advisory reports changes; strict fails when review is required. Invalid input always fails.'
+    required: false
+    default: 'advisory'
+outputs:
+  verdict:
+    description: 'UNCHANGED, RECHECK_REQUIRED, or INVALID.'
+  affected-count:
+    description: 'Number of affected claims, including removed claims.'
+  report-path:
+    description: 'Absolute path to report.json in a unique runner temporary directory.'
+  summary-path:
+    description: 'Absolute path to the complete Markdown summary in the same directory.'
+runs:
+  using: 'node24'
+  main: 'src/index.mjs'

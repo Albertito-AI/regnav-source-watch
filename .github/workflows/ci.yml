@@ -1,0 +1,51 @@
+name: Release checks
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24'
+      - run: npm test
+      - run: npm run demo
+  action-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Exercise the packaged Action at the pushed commit
+        if: github.event_name == 'push'
+        id: packaged
+        uses: ./
+        with:
+          mode: advisory
+        continue-on-error: true
+      - name: Verify packaged Action verdict
+        if: github.event_name == 'push'
+        shell: bash
+        env:
+          VERDICT: ${{ steps.packaged.outputs.verdict }}
+        run: |
+          # The release workflow is committed after its fictional baseline.
+          test -n "$VERDICT"
+          case "$VERDICT" in
+            UNCHANGED|RECHECK_REQUIRED) printf 'Observed Action verdict: %s\n' "$VERDICT" ;;
+            *) exit 1 ;;
+          esac

@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "sources": [
+    {
+      "id": "source-policy",
+      "path": "sources/fictional-policy.md",
+      "title": "Fictional training review policy",
+      "version": "training-1"
+    },
+    {
+      "id": "source-exception",
+      "path": "sources/fictional-exception.md",
+      "title": "Fictional specialist referral note",
+      "version": "training-1"
+    }
+  ],
+  "claims": [
+    {
+      "id": "claim-routine",
+      "text": "Routine training records have a seven-day review target, subject to specialist referral.",
+      "evidence": [
+        {
+          "source_id": "source-policy",
+          "relation": "supports",
+          "pinpoint": "Section 1"
+        },
+        {
+          "source_id": "source-exception",
+          "relation": "qualifies",
+          "pinpoint": "Section 1"
+        }
+      ],
+      "review": {
+        "reviewer": "Fictional training reviewer",
+        "date": "2026-10-27",
+        "note": "Synthetic review declaration for the demonstration."
+      }
+    },
+    {
+      "id": "claim-specialist",
+      "text": "The fictional specialist referral target is fourteen days.",
+      "evidence": [
+        {
+          "source_id": "source-exception",
+          "relation": "supports",
+          "pinpoint": "Section 1"
+        }
+      ]
+    }
+  ]
+}
