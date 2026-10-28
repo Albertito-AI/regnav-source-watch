@@ -87,16 +87,17 @@ jobs:
           persist-credentials: false
       - name: Find affected claims
         id: source-watch
-        uses: Albertito-AI/regnav-source-watch@v0.1.0
+        uses: Albertito-AI/regnav-source-watch@5e9d6a897dc96685347114b9c1abce14807f9d16 # v0.1.0
         with:
           manifest: .regnav/manifest.json
           mode: advisory
 ```
 
-The release tag is convenient for an initial trial. For production workflows, pin
-the Action to the full commit SHA shown in the release and review upgrades before
-changing that pin. Use a GitHub-hosted runner for untrusted pull requests. See
-[SECURITY.md](SECURITY.md) for the execution boundary and baseline protection.
+This example pins the exact released commit rather than a mutable tag. Before
+upgrading, inspect the [v0.1.0 release](https://github.com/Albertito-AI/regnav-source-watch/releases/tag/v0.1.0),
+review the replacement commit and update the pin deliberately. Use a GitHub-hosted
+runner for untrusted pull requests. See [SECURITY.md](SECURITY.md) for the
+execution boundary and baseline protection.
 
 ### 3. Inspect the workflow summary
 
