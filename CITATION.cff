@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "Please cite the version or commit of RegNav Source Watch that you actually use. This citation covers this separate software project; it grants no rights in other RegNav repositories or third-party sources."
+type: software
+title: "RegNav Source Watch"
+authors:
+  - family-names: "Tan"
+    given-names: "Sin Hon Albert"
+    orcid: "https://orcid.org/0009-0001-8996-7933"
+version: "0.1.0"
+repository-code: "https://github.com/Albertito-AI/regnav-source-watch"
+url: "https://github.com/Albertito-AI/regnav-source-watch"
+license: "Apache-2.0"
+abstract: "A dependency-free GitHub Action and command-line tool that compares recorded source files and evidence links at exact Git commits. It identifies affected claims and reports review-declaration edits separately; it does not authenticate reviews or determine legal or factual truth."

@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Add machine-readable software citation metadata using the existing author,
+  ORCID, declared package version and separate-project licence scope.
+
 ## 0.1.0
 
 Initial release scope:
