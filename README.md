@@ -12,6 +12,29 @@ The implementation uses Node.js 24 and its built-in libraries. It makes no netwo
 or model calls, needs no service account or API key, and reads source bytes from
 committed Git objects. The Action writes a job summary and a local JSON report.
 
+## See it in action
+
+![The actual fictional demo first returns UNCHANGED with no affected claims, then RECHECK_REQUIRED for claim-routine after an amendment to its policy source.](docs/demo/source-watch-flow.svg)
+
+Supply the [two-source fictional example](examples/basic). The existing demo
+creates temporary Git commits, compares the baseline with itself, then appends
+a five-day amendment to the policy's seven-day review target. The observed
+results are **`UNCHANGED` → `RECHECK_REQUIRED`**, with only
+**`claim-routine`** flagged after that source change.
+
+From the repository folder, with Git and Node.js 24 installed:
+
+```sh
+npm run demo
+```
+
+[Read the captured command output](docs/demo/observed-session.txt) ·
+[Inspect the demo script](scripts/demo.mjs) ·
+[Follow the full walkthrough](#try-the-fictional-demonstration)
+
+The diagram illustrates the real CLI results. Temporary commit identifiers vary
+by run; the unchanged referral source leaves `claim-specialist` unaffected.
+
 ## What a change tells you
 
 Suppose a research record links `claim-routine` to a saved policy containing a

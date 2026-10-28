@@ -1,0 +1,25 @@
+Observed fictional demonstration
+Recorded UTC: 2026-10-28T08:56:08+00:00
+Implementation commit: 460cffc987d1d4ea79ac5c6455c8fafb989924b0
+Runtime: Node.js v24.22.1
+All input sources, claims and reviewer details are fictional.
+npm wrapper notices omitted; actual fictional demo output retained. Temporary commit IDs vary by run.
+
+$ npm run demo
+Fictional example; actual CLI output from temporary Git commits.
+{
+  "verdict": "UNCHANGED",
+  "affected_claims": [],
+  "base_revision": "6dcb0056a4dac07904051679d80f47ee3798aaaa",
+  "head_revision": "6dcb0056a4dac07904051679d80f47ee3798aaaa"
+}
+{
+  "verdict": "RECHECK_REQUIRED",
+  "affected_claims": [
+    "claim-routine"
+  ],
+  "base_revision": "6dcb0056a4dac07904051679d80f47ee3798aaaa",
+  "head_revision": "befd1c9f3f3ce1dd82948110653325e4d037c419"
+}
+Exit status: 0
+
