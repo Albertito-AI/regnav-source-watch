@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, cpSync, writeFileSync, appendFileSync, readFileSync, rmSync, existsSync, mkdirSync, symlinkSync, realpathSync, renameSync } from 'node:fs';
+import { mkdtempSync, cpSync, writeFileSync, appendFileSync, readFileSync, rmSync, existsSync, mkdirSync, symlinkSync, realpathSync, renameSync, statSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -47,8 +47,14 @@ test('repository discovery works from both an ordinary root and a nested directo
   const f = fixture(t);
   const nested = join(f.repo, 'working directory', 'nested');
   mkdirSync(nested, { recursive: true });
+  const expected = statSync(f.repo, { bigint: true });
   for (const directory of [f.repo, nested]) {
-    assert.equal(repositoryRoot(directory), realpathSync(f.repo));
+    // Git may expand a Windows 8.3 alias (RUNNER~1) to its long name. Verify
+    // the actual directory identity rather than requiring one path spelling.
+    const observed = statSync(repositoryRoot(directory), { bigint: true });
+    assert.equal(observed.isDirectory(), true);
+    assert.equal(observed.dev, expected.dev);
+    assert.equal(observed.ino, expected.ino);
     assert.equal(runComparison({ repo: directory, base: f.base, head: f.base }).report.verdict, 'UNCHANGED');
   }
 });
