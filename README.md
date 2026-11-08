@@ -177,6 +177,10 @@ commits, so uncommitted workspace edits do not enter the comparison.
 The existing output parent is resolved before writing. Paths into `.git` are
 refused even when reached through a symlink or Windows junction.
 
+Repository discovery preserves whitespace in valid POSIX directory names,
+including trailing spaces, when invoked from the root or a nested directory.
+Windows retains its operating-system restrictions on directory names.
+
 | Condition | Advisory exit | Strict exit |
 | --- | --- | --- |
 | `UNCHANGED` | 0 | 0 |

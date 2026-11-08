@@ -35,7 +35,10 @@ export function repositoryRoot(directory) {
     candidate = realpathSync(resolve(directory));
     if (!statSync(candidate).isDirectory()) throw new Error();
   } catch { throw new InvalidInput('The repository directory is unavailable.'); }
-  const root = git(candidate, ['rev-parse', '--show-toplevel']).toString('utf8').trim();
+  // Remove only Git's output terminator. POSIX directory names may themselves
+  // end in whitespace, including CR or LF; Windows forbids those final controls.
+  const terminator = process.platform === 'win32' ? /\r?\n$/u : /\n$/u;
+  const root = git(candidate, ['rev-parse', '--show-toplevel']).toString('utf8').replace(terminator, '');
   if (!root) throw new InvalidInput('A checked-out Git working tree is required.');
   return realpathSync(root);
 }

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, cpSync, writeFileSync, appendFileSync, readFileSync, rmSync, existsSync, mkdirSync, symlinkSync, realpathSync } from 'node:fs';
+import { mkdtempSync, cpSync, writeFileSync, appendFileSync, readFileSync, rmSync, existsSync, mkdirSync, symlinkSync, realpathSync, renameSync, statSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -42,6 +42,34 @@ test('CLI reports unchanged committed sources and creates complete output pair',
   assert.equal(JSON.parse(result.stdout).verdict, 'UNCHANGED');
   assert.equal(JSON.parse(readFileSync(join(out, 'report.json'))).verdict, 'UNCHANGED');
   assert.match(readFileSync(join(out, 'summary.md'), 'utf8'), /UNCHANGED/);
+});
+test('repository discovery works from both an ordinary root and a nested directory', t => {
+  const f = fixture(t);
+  const nested = join(f.repo, 'working directory', 'nested');
+  mkdirSync(nested, { recursive: true });
+  const expected = statSync(f.repo, { bigint: true });
+  for (const directory of [f.repo, nested]) {
+    // Git may expand a Windows 8.3 alias (RUNNER~1) to its long name. Verify
+    // the actual directory identity rather than requiring one path spelling.
+    const observed = statSync(repositoryRoot(directory), { bigint: true });
+    assert.equal(observed.isDirectory(), true);
+    assert.equal(observed.dev, expected.dev);
+    assert.equal(observed.ino, expected.ino);
+    assert.equal(runComparison({ repo: directory, base: f.base, head: f.base }).report.verdict, 'UNCHANGED');
+  }
+});
+test('POSIX repository roots retain significant trailing whitespace', { skip: process.platform === 'win32' }, t => {
+  for (const suffix of [' ', '\t', '\r', '\n', '\u00a0']) {
+    const f = fixture(t);
+    const renamed = f.repo + suffix;
+    renameSync(f.repo, renamed);
+    t.after(() => rmSync(renamed, { recursive: true, force: true }));
+    f.repo = renamed;
+    assert.equal(repositoryRoot(f.repo), realpathSync(f.repo));
+    const result = cli(f, ['--mode', 'strict']);
+    assert.equal(result.status, 0, JSON.stringify({ suffix, stdout: result.stdout, stderr: result.stderr }));
+    assert.equal(JSON.parse(result.stdout).verdict, 'UNCHANGED');
+  }
 });
 test('strict and advisory modes preserve identical affected claims but differ in exit status', t => {
   const f = fixture(t); appendFileSync(join(f.repo, 'sources/fictional-policy.md'), '\nChanged fictional text.\n'); const head = f.commit();
