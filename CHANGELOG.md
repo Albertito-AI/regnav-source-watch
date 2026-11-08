@@ -5,6 +5,8 @@
 - Resolve the existing report parent before writing, preventing symlinks or
   Windows junctions from redirecting output into `.git`. Ordinary parent links
   remain supported, with exclusive creation and no overwrite preserved.
+- Preserve significant trailing whitespace in POSIX repository roots. Root
+  discovery removes only Git's output terminator and works from nested folders.
 - Add machine-readable software citation metadata using the existing author,
   ORCID, declared package version and separate-project licence scope.
 
