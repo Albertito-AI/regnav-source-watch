@@ -1,5 +1,5 @@
-import { mkdirSync, writeFileSync, existsSync } from 'node:fs';
-import { resolve, dirname, sep } from 'node:path';
+import { mkdirSync, writeFileSync, existsSync, realpathSync } from 'node:fs';
+import { resolve, dirname, basename, sep } from 'node:path';
 import { compareSnapshots, renderMarkdown, InvalidInput } from './core.mjs';
 import { repositoryRoot, snapshotFromGit } from './git.mjs';
 
@@ -22,9 +22,14 @@ export function invalidResult(error) {
 }
 
 export function writeReports(directory, result) {
-  const target = resolve(directory);
-  if (target.split(sep).some(part => part.toLowerCase() === '.git')) throw new InvalidInput('Reports cannot be written inside Git administration directories.');
-  if (existsSync(target) || !existsSync(dirname(target))) throw new InvalidInput('Choose a new report directory under an existing parent; existing output is never overwritten.');
+  const requested = resolve(directory);
+  const isGitDirectory = path => path.split(sep).some(part => part.toLowerCase() === '.git');
+  if (isGitDirectory(requested)) throw new InvalidInput('Reports cannot be written inside Git administration directories.');
+  if (existsSync(requested) || !existsSync(dirname(requested))) throw new InvalidInput('Choose a new report directory under an existing parent; existing output is never overwritten.');
+  // Resolve the existing parent before validating and writing. An innocently
+  // named symlink or Windows junction must not redirect output into .git.
+  const target = resolve(realpathSync(dirname(requested)), basename(requested));
+  if (isGitDirectory(target)) throw new InvalidInput('Reports cannot be written inside Git administration directories.');
   mkdirSync(target, { recursive: false, mode: 0o700 });
   const reportPath = resolve(target, 'report.json');
   const summaryPath = resolve(target, 'summary.md');

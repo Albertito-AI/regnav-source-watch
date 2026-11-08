@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, cpSync, writeFileSync, appendFileSync, readFileSync, rmSync, existsSync, mkdirSync } from 'node:fs';
+import { mkdtempSync, cpSync, writeFileSync, appendFileSync, readFileSync, rmSync, existsSync, mkdirSync, symlinkSync, realpathSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -104,4 +104,23 @@ test('CLI refuses existing output and preserves its content', t => {
 test('report output cannot target Git administration directories', t => {
   const f = fixture(t); const result = runComparison({ repo: f.repo, base: f.base, head: f.base });
   assert.throws(() => writeReports(join(f.repo, '.git', 'report'), result), /administration/);
+});
+test('report output cannot enter Git administration through a parent symlink or junction', t => {
+  const f = fixture(t); const result = runComparison({ repo: f.repo, base: f.base, head: f.base });
+  const alias = join(f.repo, 'report-parent');
+  symlinkSync(join(f.repo, '.git'), alias, process.platform === 'win32' ? 'junction' : 'dir');
+  assert.throws(() => writeReports(join(alias, 'report'), result), /administration/);
+  assert.equal(existsSync(join(f.repo, '.git', 'report')), false);
+});
+test('an ordinary parent symlink or junction retains complete reports and exclusive creation', t => {
+  const f = fixture(t); const result = runComparison({ repo: f.repo, base: f.base, head: f.base });
+  const parent = join(f.repo, 'reports');
+  const alias = join(f.repo, 'report-parent');
+  mkdirSync(parent);
+  symlinkSync(parent, alias, process.platform === 'win32' ? 'junction' : 'dir');
+  const paths = writeReports(join(alias, 'run'), result);
+  assert.equal(realpathSync(paths.reportPath), join(realpathSync(parent), 'run', 'report.json'));
+  assert.deepEqual(JSON.parse(readFileSync(paths.reportPath, 'utf8')), result.report);
+  assert.equal(readFileSync(paths.summaryPath, 'utf8'), result.markdown);
+  assert.throws(() => writeReports(join(alias, 'run'), result), /existing output/);
 });
