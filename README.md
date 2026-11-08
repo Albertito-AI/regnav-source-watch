@@ -174,6 +174,8 @@ node src/cli.mjs \
 Use a new output directory under an existing parent. The command writes
 `report.json` and `summary.md`; existing output directories are refused. All inputs are read from the named Git
 commits, so uncommitted workspace edits do not enter the comparison.
+The existing output parent is resolved before writing. Paths into `.git` are
+refused even when reached through a symlink or Windows junction.
 
 | Condition | Advisory exit | Strict exit |
 | --- | --- | --- |
