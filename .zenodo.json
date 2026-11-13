@@ -1,0 +1,20 @@
+{
+  "title": "RegNav Source Watch",
+  "description": "Track source changes and identify affected research, policy and governance claims in GitHub pull requests. Dependency-free evidence review Action. This deposit preserves a dated source snapshot of the implementation and documentation, with the limitations stated in the repository.",
+  "creators": [
+    {
+      "name": "Tan, Sin Hon Albert",
+      "orcid": "0009-0001-8996-7933"
+    }
+  ],
+  "upload_type": "software",
+  "access_right": "open",
+  "license": "Apache-2.0",
+  "notes": "Apache-2.0 applies to this project only. The tool detects recorded changes; it does not establish legal or factual truth or authenticate human review. Archival publication does not establish peer review, independent validation or production readiness.",
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/Albertito-AI/regnav-source-watch",
+      "relation": "isSupplementTo"
+    }
+  ]
+}
