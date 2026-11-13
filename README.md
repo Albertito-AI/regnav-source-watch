@@ -203,6 +203,20 @@ remote website may change while its saved local copy remains identical. The tool
 does not retrieve websites, discover new authorities or decide whether a source
 supports a proposition. Full boundaries are in [docs/limitations.md](docs/limitations.md).
 
+## Integration example: local candidate evidence
+
+[Evidence Replay in Colibri Atlas](https://github.com/Albertito-AI/colibri-atlas/tree/main/examples/atlas_evidence), public prototype **0.1.0a1**,
+checks candidate quotations against supplied snapshots and optionally uses Atlas
+Reweave to recheck changed quotation rules. Its Source Watch export labels every
+automated evidence relation `context` and invents no human review declaration.
+The interoperability check compares two temporary Git commits and flags only the
+claim linked to the changed source.
+
+The [validation record](https://github.com/Albertito-AI/colibri-atlas/blob/main/examples/atlas_evidence/VALIDATION.md) reports **48 tests passed, zero skips**,
+including Colibri's actual HTTP gateway with a scripted engine double.
+Real-model quality remains untested. Literal quotation agreement does not
+establish semantic support, source authenticity or legal accuracy.
+
 ## Documentation and support
 
 - [Manifest format](docs/manifest.md)
