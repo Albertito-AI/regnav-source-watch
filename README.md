@@ -242,3 +242,7 @@ Original code, documentation and fictional fixtures in this repository are
 licensed under [Apache-2.0](LICENSE). That licence applies to this package only.
 Other RegNav materials, source documents and third-party content retain their
 existing rights. No institutional endorsement or legal certification is claimed.
+
+## Sport governance teaching application
+
+Track a nomination policy or grant condition. A changed source opens a review for the officer who relies on that clause. [Exercise and records](https://github.com/Albertito-AI/sport-governance-and-administration/blob/main/cases/14-maxwell-cycling-nomination.md) · [Albert Tan’s book and teaching companion](https://alberttansinhon.com/sport-governance/).
